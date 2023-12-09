@@ -51,7 +51,7 @@ class Clase_Televisores_Model {
   }
   
   insertar() {
-    var self = this; // Almacenar una referencia al objeto en 'self'
+    var self = this;
     
     $.ajax({
       url: "../../Controllers/televisores.controller.php?op=insertar",
@@ -64,8 +64,8 @@ class Clase_Televisores_Model {
         if (res === "ok") {
           Swal.fire("Televisor", "Televisor Registrado", "success");
           
-          self.limpia_Cajas(); // Usar 'self' en lugar de 'this'
-          self.todos_controlador(); // Usar 'self' en lugar de 'this'
+          self.limpia_Cajas(); 
+          self.todos_controlador(); 
         } else {
           Swal.fire("Error", res, "error");
         }
@@ -73,7 +73,54 @@ class Clase_Televisores_Model {
     });
   }
   
+  eliminar(televisorId) {
+    Swal.fire({
+      title: "Eliminar Televisor",
+      text: "¿Estás seguro de eliminar este televisor?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `../../Controllers/televisores.controller.php?op=eliminar&televisorId=${televisorId}`,
+          type: "POST",
+          success: function (res) {
+            res = JSON.parse(res);
+            if (res === "ok") {
+              Swal.fire("Eliminado", "El televisor ha sido eliminado", "success");             
+              this.todos();
+            } else {
+              Swal.fire("Error", res, "error");
+            }
+          }.bind(this)
+        });
+      }
+    });
+  }
   
+  editar(televisorId) {
+    $.post(
+      "../../Controllers/televisores.controller.php?op=uno",
+      { televisorId: televisorId },
+      (res) => {
+        res = JSON.parse(res);
+  
+        // Actualizar los campos del formulario con los datos del televisor
+        $("#marca").val(res.marca);
+        $("#pulgadas").val(res.pulgadas);
+        $("#cantidad").val(res.cantidad);
+        $("#tasaRefresco").val(res.tasaRefresco);
+        
+        // Muestra el modal o formulario de edición de televisor
+        $("#Modal_usuario").modal("show");
+      }
+    );
+  }
+  
+
   limpia_Cajas()
   {
     document.getElementById("marca").value = "";

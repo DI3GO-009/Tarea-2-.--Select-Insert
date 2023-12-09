@@ -30,4 +30,27 @@ var guardaryeditar = (e) => {
 }
 
 
+var editar_controlador = (id) => {
+    var uno = new Clase_Televisores_Model(id, "", "", "", "", "editar_controlador");
+    uno.editar();
+}
+
+$('#botonEditar').on('click', function () {
+    var televisorId = obtenerIdDelTelevisorAEditar();
+    editar_controlador(televisorId);
+});
+
+var eliminar_controlador = (id) => {
+    var eliminar = new Clase_Televisores_Model(id, "", "", "", "", "eliminar_controlador");
+    eliminar.eliminar();
+}
+
+$('#botonEliminar').on('click', function () {
+    var televisorId = obtenerIdDelTelevisorAEliminar();
+    eliminar_controlador(televisorId);
+});
+
+
+
+
 ;init();
